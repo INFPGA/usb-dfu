@@ -64,8 +64,8 @@ all: main-build
 main-build: stm32f411-boot.elf secondary-outputs
 
 # Tool invocations
-stm32f411-boot.elf stm32f411-boot.map: $(OBJS) $(USER_OBJS) C:\Home-project\STM32\blackpill\stm32f411-boot\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stm32f411-boot.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Home-project\STM32\blackpill\stm32f411-boot\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f411-boot.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stm32f411-boot.elf stm32f411-boot.map: $(OBJS) $(USER_OBJS) C:\Home-project\STM32\blackpill\usb-dfu\stm32f411-boot\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "stm32f411-boot.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Home-project\STM32\blackpill\usb-dfu\stm32f411-boot\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f411-boot.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

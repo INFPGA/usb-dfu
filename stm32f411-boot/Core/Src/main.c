@@ -47,6 +47,7 @@ typedef  void (*pFunction)(void);
 /* USER CODE BEGIN PV */
 pFunction JumpToApplication;
 uint32_t JumpAddress;
+bool jumpFlag = false;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,23 +58,25 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == JUMP_BTN_Pin)
+  {
+    jumpFlag = true;
+  }
+}
+
 int main(void)
 {
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
   MX_RTC_Init();
-
-
-
   MX_USB_DEVICE_Init();
 
   while (1)
   {
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    HAL_Delay(50);
-
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_RESET)
+    if (jumpFlag)
     {
       if(((*(__IO uint32_t*)USBD_DFU_APP_DEFAULT_ADD) & 0x2200000C) == 0x20000000)
       {
@@ -85,6 +88,11 @@ int main(void)
         __set_MSP((*(__IO uint32_t*) USBD_DFU_APP_DEFAULT_ADD ));
         JumpToApplication();
       }
+    }
+    else
+    {
+      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+      HAL_Delay(100);
     }
   }
 }
